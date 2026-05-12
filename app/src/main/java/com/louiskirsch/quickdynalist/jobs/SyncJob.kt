@@ -256,9 +256,13 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
     override fun getRetryLimit(): Int = 2
     override fun onCancel(@CancelReason cancelReason: Int, throwable: Throwable?) {
         if (cancelReason == CancelReason.REACHED_RETRY_LIMIT) {
+            val errorMessage = throwable?.localizedMessage
+                    ?.takeUnless { it.isBlank() }
+                    ?: throwable?.message?.takeUnless { it.isBlank() }
+                    ?: throwable?.javaClass?.simpleName
             EventBus.getDefault().apply {
                 postSticky(SyncEvent(SyncStatus.NOT_RUNNING, isManual))
-                post(SyncEvent(SyncStatus.NO_SUCCESS, isManual))
+                post(SyncEvent(SyncStatus.NO_SUCCESS, isManual, errorMessage))
             }
         }
     }

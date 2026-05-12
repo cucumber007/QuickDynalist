@@ -14,7 +14,11 @@ class ForbiddenImageEvent(val uri: Uri)
 class ItemAddedEvent(val item: DynalistItem)
 
 enum class SyncStatus { RUNNING, NOT_RUNNING, SUCCESS, NO_SUCCESS }
-class SyncEvent(val status: SyncStatus, val isManual: Boolean)
+class SyncEvent(
+    val status: SyncStatus,
+    val isManual: Boolean,
+    val errorMessage: String? = null
+)
 class SyncProgressEvent(val progress: Float)
 
 class NightModeChangedEvent

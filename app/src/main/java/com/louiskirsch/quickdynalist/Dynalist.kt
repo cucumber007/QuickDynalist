@@ -134,7 +134,12 @@ class Dynalist(private val context: Context) {
             SyncStatus.SUCCESS -> if (event.isManual) {
                 context.toast(R.string.alert_sync_success)
             }
-            SyncStatus.NO_SUCCESS -> context.toast(R.string.alert_sync_no_success)
+            SyncStatus.NO_SUCCESS -> {
+                val message = event.errorMessage
+                        ?.let { "${context.getString(R.string.alert_sync_no_success)}: $it" }
+                        ?: context.getString(R.string.alert_sync_no_success)
+                context.toast(message)
+            }
         }
     }
 
