@@ -2,7 +2,7 @@ package com.louiskirsch.quickdynalist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.toast
 
 class WizardActivity : AppCompatActivity() {
 

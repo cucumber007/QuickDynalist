@@ -41,7 +41,7 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.query
 import kotlinx.android.synthetic.main.app_bar_navigation.*
 import kotlinx.android.synthetic.main.fragment_item_list.*
-import org.jetbrains.anko.*
+import com.louiskirsch.quickdynalist.compat.anko.*
 import java.util.*
 
 abstract class BaseItemListFragment :Fragment(),

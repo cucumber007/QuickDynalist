@@ -12,7 +12,7 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.doAsync
+import com.louiskirsch.quickdynalist.compat.anko.doAsync
 
 abstract class ItemJob: Job(Params(1)
         .requireNetwork().persist().groupBy("itemJob")) {

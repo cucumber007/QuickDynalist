@@ -12,8 +12,8 @@ import androidx.core.content.FileProvider
 import com.louiskirsch.quickdynalist.R
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.doAsync
+import com.louiskirsch.quickdynalist.compat.anko.toast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream

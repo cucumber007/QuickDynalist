@@ -11,7 +11,7 @@ import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.collections.forEachWithIndex
+import com.louiskirsch.quickdynalist.compat.anko.collections.forEachWithIndex
 import org.jetbrains.annotations.Nullable
 import java.util.*
 

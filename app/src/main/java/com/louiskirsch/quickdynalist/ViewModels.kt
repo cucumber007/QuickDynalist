@@ -11,7 +11,7 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
-import org.jetbrains.anko.doAsync
+import com.louiskirsch.quickdynalist.compat.anko.doAsync
 
 class DynalistItemViewModel(app: Application): AndroidViewModel(app) {
 

@@ -22,7 +22,7 @@ import com.louiskirsch.quickdynalist.DynalistApp
 import com.louiskirsch.quickdynalist.R
 import com.louiskirsch.quickdynalist.SearchActivity
 import com.louiskirsch.quickdynalist.objectbox.DynalistItem
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.toast
 
 class DynalistEditActionHelper {
 

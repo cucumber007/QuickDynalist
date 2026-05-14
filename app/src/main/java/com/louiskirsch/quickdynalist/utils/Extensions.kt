@@ -10,7 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import org.jetbrains.anko.find
+import com.louiskirsch.quickdynalist.compat.anko.find
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint

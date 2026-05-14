@@ -7,7 +7,7 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.fragment.app.Fragment
 import com.louiskirsch.quickdynalist.R
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.toast
 
 class SpeechRecognitionHelper {
 

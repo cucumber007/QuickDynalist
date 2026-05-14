@@ -24,7 +24,7 @@ import com.louiskirsch.quickdynalist.utils.SpeechRecognitionHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.*
+import com.louiskirsch.quickdynalist.compat.anko.*
 import java.util.*
 
 

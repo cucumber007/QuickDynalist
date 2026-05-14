@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso
 import io.objectbox.kotlin.boxFor
 import kotlinx.android.synthetic.main.app_bar_navigation.*
 import kotlinx.android.synthetic.main.fragment_item_list.*
-import org.jetbrains.anko.*
+import com.louiskirsch.quickdynalist.compat.anko.*
 
 class ItemListFragment : BaseItemListFragment() {
     private lateinit var location: DynalistItem

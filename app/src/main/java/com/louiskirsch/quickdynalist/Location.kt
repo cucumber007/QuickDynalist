@@ -10,7 +10,7 @@ import com.louiskirsch.quickdynalist.objectbox.DynalistItemFilter
 import com.louiskirsch.quickdynalist.text.ThemedSpan
 import com.louiskirsch.quickdynalist.utils.ellipsis
 import com.louiskirsch.quickdynalist.utils.resolveColorAttribute
-import org.jetbrains.anko.colorAttr
+import com.louiskirsch.quickdynalist.compat.anko.colorAttr
 
 interface Location {
     val id: Long

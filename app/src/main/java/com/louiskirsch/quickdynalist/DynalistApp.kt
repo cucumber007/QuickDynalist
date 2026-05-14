@@ -16,7 +16,7 @@ import io.objectbox.kotlin.boxFor
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.doAsync
+import com.louiskirsch.quickdynalist.compat.anko.doAsync
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*

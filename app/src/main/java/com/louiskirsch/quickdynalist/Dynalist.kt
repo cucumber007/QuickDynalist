@@ -23,7 +23,7 @@ import io.objectbox.kotlin.query
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.*
+import com.louiskirsch.quickdynalist.compat.anko.*
 import java.io.File
 import java.util.*
 

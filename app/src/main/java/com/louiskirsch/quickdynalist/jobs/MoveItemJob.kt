@@ -6,7 +6,7 @@ import com.louiskirsch.quickdynalist.objectbox.DynalistItem
 import com.louiskirsch.quickdynalist.objectbox.DynalistItem_
 import com.louiskirsch.quickdynalist.widget.ListAppWidget
 import io.objectbox.kotlin.query
-import org.jetbrains.anko.collections.forEachWithIndex
+import com.louiskirsch.quickdynalist.compat.anko.collections.forEachWithIndex
 import retrofit2.Response
 
 

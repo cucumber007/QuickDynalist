@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.browse
+import com.louiskirsch.quickdynalist.compat.anko.toast
 
 class LoginFragment : Fragment() {
 

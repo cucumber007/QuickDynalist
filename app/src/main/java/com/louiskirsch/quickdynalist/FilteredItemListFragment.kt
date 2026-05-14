@@ -17,7 +17,7 @@ import com.louiskirsch.quickdynalist.objectbox.DynalistItemFilter
 import com.louiskirsch.quickdynalist.widget.ListAppWidget
 import io.objectbox.kotlin.boxFor
 import kotlinx.android.synthetic.main.fragment_item_list.*
-import org.jetbrains.anko.*
+import com.louiskirsch.quickdynalist.compat.anko.*
 import android.util.Pair as UtilPair
 
 class FilteredItemListFragment : BaseItemListFragment() {

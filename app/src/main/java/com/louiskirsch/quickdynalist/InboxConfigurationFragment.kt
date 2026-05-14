@@ -16,10 +16,10 @@ import com.louiskirsch.quickdynalist.network.SetInboxRequest
 import com.louiskirsch.quickdynalist.objectbox.DynalistItem
 import kotlinx.android.synthetic.main.fragment_inbox_configuration.*
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.doAsyncResult
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.uiThread
+import com.louiskirsch.quickdynalist.compat.anko.doAsync
+import com.louiskirsch.quickdynalist.compat.anko.doAsyncResult
+import com.louiskirsch.quickdynalist.compat.anko.longToast
+import com.louiskirsch.quickdynalist.compat.anko.uiThread
 
 class InboxConfigurationFragment : Fragment() {
     private var finishAfter: Boolean = false

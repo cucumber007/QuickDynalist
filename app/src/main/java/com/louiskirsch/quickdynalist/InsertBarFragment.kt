@@ -31,7 +31,7 @@ import com.louiskirsch.quickdynalist.utils.clearSpans
 import com.louiskirsch.quickdynalist.utils.setupGrowingMultiline
 import kotlinx.android.synthetic.main.app_bar_navigation.*
 import kotlinx.android.synthetic.main.fragment_insert_bar.*
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.toast
 import java.util.*
 
 class InsertBarFragment : Fragment() {

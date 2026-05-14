@@ -22,9 +22,9 @@ import kotlinx.android.synthetic.main.app_bar_navigation.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.okButton
-import org.jetbrains.anko.toast
+import com.louiskirsch.quickdynalist.compat.anko.alert
+import com.louiskirsch.quickdynalist.compat.anko.okButton
+import com.louiskirsch.quickdynalist.compat.anko.toast
 import android.content.Intent
 import android.net.Uri
 import android.content.ActivityNotFoundException
