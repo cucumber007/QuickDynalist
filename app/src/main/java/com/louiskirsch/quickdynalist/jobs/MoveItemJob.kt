@@ -62,6 +62,7 @@ class MoveItemJob(val item: DynalistItem, val parent: DynalistItem, val toPositi
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.delayOperationForVisibility()
         requireItemId(parent)
         requireItemId(item)
         val dynalist = Dynalist(applicationContext)

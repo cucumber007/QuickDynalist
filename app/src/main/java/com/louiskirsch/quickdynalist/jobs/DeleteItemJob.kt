@@ -35,6 +35,7 @@ class DeleteItemJob(val item: DynalistItem): ItemJob() {
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.delayOperationForVisibility()
         requireItemId(item)
         val token = Dynalist(applicationContext).token
         val request = DeleteItemRequest(item.serverFileId!!, item.serverItemId!!, token!!)

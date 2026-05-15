@@ -59,6 +59,7 @@ class CloneItemJob(val item: DynalistItem): ItemJob() {
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.delayOperationForVisibility()
         // need to wait for db operations to complete
         val item = waitForItem(box.query {
             equal(DynalistItem_.syncJob, "$id-root", QueryBuilder.StringOrder.CASE_INSENSITIVE)

@@ -106,6 +106,7 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
     @Throws(Throwable::class)
     override fun onRun() {
         EventBus.getDefault().postSticky(SyncEvent(SyncStatus.RUNNING, isManual))
+        SyncLog.delayOperationForVisibility()
         val dynalist = Dynalist(applicationContext)
         val token = dynalist.token
         val service = DynalistApp.instance.dynalistService

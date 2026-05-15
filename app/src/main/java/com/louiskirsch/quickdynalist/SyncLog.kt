@@ -11,8 +11,13 @@ object SyncLog {
     private const val PREFS = "sync_log"
     private const val KEY_ERRORS = "errors"
     private const val MAX_ERRORS = 50
+    private const val OPERATION_VISIBILITY_DELAY_MS = 5_000L
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+
+    fun delayOperationForVisibility() {
+        Thread.sleep(OPERATION_VISIBILITY_DELAY_MS)
+    }
 
     @Synchronized
     fun recordError(job: String, throwable: Throwable?) {

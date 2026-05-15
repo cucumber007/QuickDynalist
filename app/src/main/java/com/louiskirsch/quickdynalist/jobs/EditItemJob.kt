@@ -22,6 +22,7 @@ class EditItemJob(val item: DynalistItem): ItemJob() {
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.delayOperationForVisibility()
         requireItemId(item)
         val token = Dynalist(applicationContext).token
         val request = EditItemRequest(item.serverFileId!!, item.serverItemId!!, item.name,

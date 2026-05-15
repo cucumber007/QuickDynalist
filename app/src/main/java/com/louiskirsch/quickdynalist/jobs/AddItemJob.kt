@@ -48,6 +48,7 @@ class AddItemJob(text: String, note: String, val parent: DynalistItem): ItemJob(
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.delayOperationForVisibility()
         val response = insertAPIRequest()
         requireSuccess(response)
         val newItemId = when (response) {

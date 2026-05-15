@@ -36,6 +36,7 @@ class BulkEditItemJob(val items: List<DynalistItem>): ItemJob() {
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.delayOperationForVisibility()
         items.forEach { requireItemId(it) }
         val token = Dynalist(applicationContext).token
         val edits = items.map { item ->
