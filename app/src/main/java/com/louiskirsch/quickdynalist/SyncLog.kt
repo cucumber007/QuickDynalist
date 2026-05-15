@@ -10,6 +10,7 @@ import java.util.Locale
 object SyncLog {
     private const val PREFS = "sync_log"
     private const val KEY_ERRORS = "errors"
+    private const val KEY_FULL_SYNC_STATE = "full_sync_state"
     private const val MAX_ERRORS = 50
     private const val OPERATION_VISIBILITY_DELAY_MS = 5_000L
 
@@ -17,6 +18,24 @@ object SyncLog {
 
     fun delayOperationForVisibility() {
         Thread.sleep(OPERATION_VISIBILITY_DELAY_MS)
+    }
+
+    @Synchronized
+    fun markFullSyncQueued() {
+        DynalistApp.instance.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                .edit().putString(KEY_FULL_SYNC_STATE, "Queued").apply()
+    }
+
+    @Synchronized
+    fun markFullSyncRunning() {
+        DynalistApp.instance.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                .edit().putString(KEY_FULL_SYNC_STATE, "Running").apply()
+    }
+
+    @Synchronized
+    fun markFullSyncIdle() {
+        DynalistApp.instance.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                .edit().remove(KEY_FULL_SYNC_STATE).apply()
     }
 
     @Synchronized
@@ -38,9 +57,11 @@ object SyncLog {
     }
 
     fun buildReport(context: Context): String {
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val fullSyncState = prefs.getString(KEY_FULL_SYNC_STATE, null)
         val pendingItems = DynalistItem.box.all.filter { it.syncJob != null }
         val pendingJobs = pendingItems.groupBy { it.syncJob!! }
-        val queue = if (pendingJobs.isEmpty()) {
+        val itemQueue = if (pendingJobs.isEmpty()) {
             "No pending item jobs."
         } else {
             pendingJobs.entries.joinToString("\n\n") { (jobId, items) ->
@@ -53,11 +74,11 @@ object SyncLog {
             }
         }
 
-        val errors = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .getString(KEY_ERRORS, "")!!
+        val syncQueue = fullSyncState?.let { "Full sync: $it\n\n" } ?: ""
+        val errors = prefs.getString(KEY_ERRORS, "")!!
                 .takeUnless { it.isBlank() }
                 ?: "No job errors recorded."
 
-        return "Sync queue\n$queue\n\nJob errors\n$errors"
+        return "Sync queue\n$syncQueue$itemQueue\n\nJob errors\n$errors"
     }
 }

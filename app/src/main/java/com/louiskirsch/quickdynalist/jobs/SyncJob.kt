@@ -36,7 +36,9 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
         }
     }
 
-    override fun onAdded() {}
+    override fun onAdded() {
+        SyncLog.markFullSyncQueued()
+    }
 
     private fun syncDocument(service: DynalistService, token: String, file: File, syncStart: Long,
                              notAssociatedClientItems: MutableSet<DynalistItem>,
@@ -105,6 +107,7 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
 
     @Throws(Throwable::class)
     override fun onRun() {
+        SyncLog.markFullSyncRunning()
         EventBus.getDefault().postSticky(SyncEvent(SyncStatus.RUNNING, isManual))
         SyncLog.delayOperationForVisibility()
         val dynalist = Dynalist(applicationContext)
@@ -213,6 +216,7 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
         }
 
         dynalist.lastFullSync = Date()
+        SyncLog.markFullSyncIdle()
         EventBus.getDefault().apply {
             postSticky(SyncEvent(SyncStatus.NOT_RUNNING, isManual))
             post(SyncEvent(SyncStatus.SUCCESS, isManual))
@@ -256,6 +260,7 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
 
     override fun getRetryLimit(): Int = 2
     override fun onCancel(@CancelReason cancelReason: Int, throwable: Throwable?) {
+        SyncLog.markFullSyncIdle()
         if (throwable != null) SyncLog.recordError("SyncJob cancelled", throwable)
         if (cancelReason == CancelReason.REACHED_RETRY_LIMIT) {
             val errorMessage = throwable?.localizedMessage
