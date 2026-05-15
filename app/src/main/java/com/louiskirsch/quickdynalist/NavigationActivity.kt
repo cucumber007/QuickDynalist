@@ -3,6 +3,8 @@ package com.louiskirsch.quickdynalist
 import android.app.Activity
 import android.app.ActivityOptions
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -300,17 +302,24 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     private fun showSyncLog() {
-        AlertDialog.Builder(this)
+        val handler = Handler(Looper.getMainLooper())
+        val logText = TextView(this).apply {
+            setPadding(32, 24, 32, 24)
+            setTextIsSelectable(true)
+        }
+        val refresh = object : Runnable {
+            override fun run() {
+                logText.text = SyncLog.buildReport(this@NavigationActivity)
+                handler.postDelayed(this, 1_000L)
+            }
+        }
+        val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.sync_log_title)
-                .setView(ScrollView(this).apply {
-                    addView(TextView(this@NavigationActivity).apply {
-                        setPadding(32, 24, 32, 24)
-                        text = SyncLog.buildReport(this@NavigationActivity)
-                        setTextIsSelectable(true)
-                    })
-                })
+                .setView(ScrollView(this).apply { addView(logText) })
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
+        dialog.setOnDismissListener { handler.removeCallbacks(refresh) }
+        refresh.run()
     }
 
     private fun createDynalistItemFilter() {
