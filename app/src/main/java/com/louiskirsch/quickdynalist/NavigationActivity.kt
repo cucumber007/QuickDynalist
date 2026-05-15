@@ -30,6 +30,9 @@ import android.net.Uri
 import android.content.ActivityNotFoundException
 import android.graphics.PorterDuff
 import android.text.Spannable
+import android.widget.ScrollView
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import android.text.style.ImageSpan
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -288,11 +291,26 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
             R.id.share_quickdynalist -> shareQuickDynalist()
             R.id.rate_quickdynalist -> rateQuickDynalist()
             R.id.action_sync_now -> SyncJob.forceSync()
+            R.id.action_sync_log -> showSyncLog()
             R.id.action_create_filter -> createDynalistItemFilter()
             R.id.action_search -> searchDynalistItem()
         }
         drawer_layout?.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun showSyncLog() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.sync_log_title)
+                .setView(ScrollView(this).apply {
+                    addView(TextView(this@NavigationActivity).apply {
+                        setPadding(32, 24, 32, 24)
+                        text = SyncLog.buildReport(this@NavigationActivity)
+                        setTextIsSelectable(true)
+                    })
+                })
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
     }
 
     private fun createDynalistItemFilter() {

@@ -9,6 +9,7 @@ import com.louiskirsch.quickdynalist.AuthenticatedEvent
 import com.louiskirsch.quickdynalist.Dynalist
 import com.louiskirsch.quickdynalist.DynalistApp
 import com.louiskirsch.quickdynalist.ItemEvent
+import com.louiskirsch.quickdynalist.SyncLog
 import com.louiskirsch.quickdynalist.network.AuthenticatedRequest
 import org.jetbrains.annotations.Nullable
 
@@ -33,6 +34,7 @@ class VerifyTokenJob(private val token: String)
     }
 
     override fun onCancel(@CancelReason cancelReason: Int, throwable: Throwable?) {
+        if (throwable != null) SyncLog.recordError("VerifyTokenJob cancelled", throwable)
         EventBus.getDefault().post(AuthenticatedEvent(false))
     }
 
@@ -40,6 +42,7 @@ class VerifyTokenJob(private val token: String)
 
     override fun shouldReRunOnThrowable(throwable: Throwable, runCount: Int,
                                         maxRunCount: Int): RetryConstraint {
+        SyncLog.recordError("VerifyTokenJob failed", throwable)
         return RetryConstraint.CANCEL
     }
 }

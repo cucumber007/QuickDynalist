@@ -68,6 +68,7 @@ abstract class ItemJob: Job(Params(1)
     }
 
     override fun onCancel(cancelReason: Int, throwable: Throwable?) {
+        if (throwable != null) SyncLog.recordError("${javaClass.simpleName} cancelled (job $id)", throwable)
         EventBus.getDefault().post(ItemEvent(false, retrying = false))
         markItemsCompleted()
     }
@@ -87,6 +88,7 @@ abstract class ItemJob: Job(Params(1)
             else -> RetryConstraint.createExponentialBackoff(runCount, 10 * 1000)
         }
         constraint.setApplyNewDelayToGroup(true)
+        SyncLog.recordError("${javaClass.simpleName} retry $runCount/$maxRunCount (job $id)", throwable)
         if (constraint.shouldRetry())
             EventBus.getDefault().post(ItemEvent(false, retrying = true))
         return constraint

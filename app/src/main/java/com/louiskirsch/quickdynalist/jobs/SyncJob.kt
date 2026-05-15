@@ -255,6 +255,7 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
 
     override fun getRetryLimit(): Int = 2
     override fun onCancel(@CancelReason cancelReason: Int, throwable: Throwable?) {
+        if (throwable != null) SyncLog.recordError("SyncJob cancelled", throwable)
         if (cancelReason == CancelReason.REACHED_RETRY_LIMIT) {
             val errorMessage = throwable?.localizedMessage
                     ?.takeUnless { it.isBlank() }
@@ -269,6 +270,7 @@ class SyncJob(requireUnmeteredNetwork: Boolean = true, val isManual: Boolean = f
 
     override fun shouldReRunOnThrowable(throwable: Throwable, runCount: Int,
                                         maxRunCount: Int): RetryConstraint {
+        SyncLog.recordError("SyncJob retry $runCount/$maxRunCount", throwable)
         return RetryConstraint.createExponentialBackoff(runCount, 10 * 1000)
     }
 }

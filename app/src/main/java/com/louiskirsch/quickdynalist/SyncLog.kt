@@ -1,0 +1,58 @@
+package com.louiskirsch.quickdynalist
+
+import android.content.Context
+import android.util.Log
+import com.louiskirsch.quickdynalist.objectbox.DynalistItem
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+object SyncLog {
+    private const val PREFS = "sync_log"
+    private const val KEY_ERRORS = "errors"
+    private const val MAX_ERRORS = 50
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+
+    @Synchronized
+    fun recordError(job: String, throwable: Throwable?) {
+        val message = throwable?.let { Log.getStackTraceString(it).takeUnless { stack -> stack.isBlank() } }
+                ?: throwable?.localizedMessage
+                ?.takeUnless { it.isBlank() }
+                ?: throwable?.message?.takeUnless { it.isBlank() }
+                ?: throwable?.javaClass?.simpleName
+                ?: "Unknown error"
+        val entry = "${dateFormat.format(Date())}  $job\n$message"
+        val prefs = DynalistApp.instance.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val errors = prefs.getString(KEY_ERRORS, "")!!
+                .split("\n\n")
+                .filter { it.isNotBlank() }
+                .toMutableList()
+        errors.add(0, entry)
+        prefs.edit().putString(KEY_ERRORS, errors.take(MAX_ERRORS).joinToString("\n\n")).apply()
+    }
+
+    fun buildReport(context: Context): String {
+        val pendingItems = DynalistItem.box.all.filter { it.syncJob != null }
+        val pendingJobs = pendingItems.groupBy { it.syncJob!! }
+        val queue = if (pendingJobs.isEmpty()) {
+            "No pending item jobs."
+        } else {
+            pendingJobs.entries.joinToString("\n\n") { (jobId, items) ->
+                val preview = items.take(5).joinToString("\n") { item ->
+                    val title = item.name.takeUnless { it.isBlank() } ?: "(empty item)"
+                    "  • ${title.take(120)}"
+                }
+                val more = if (items.size > 5) "\n  … ${items.size - 5} more" else ""
+                "Job $jobId: ${items.size} item(s)\n$preview$more"
+            }
+        }
+
+        val errors = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+                .getString(KEY_ERRORS, "")!!
+                .takeUnless { it.isBlank() }
+                ?: "No job errors recorded."
+
+        return "Sync queue\n$queue\n\nJob errors\n$errors"
+    }
+}
