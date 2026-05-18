@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quick Dynalist</string>
+    <string name="app_name">QuickerDynalist</string>
     <string name="auth_start">Get token</string>
     <string name="auth_instructions">Quick Dynalist is a third party app to access your Dynalist account. It requires an api token to proceed. Please generate a token below and copy it here. The token will only be locally stored on this device.</string>
     <string name="token_hint">Token</string>
@@ -29,9 +29,9 @@
     <string name="invalid_intent_error">Sorry. We can\'t add this item to your Dynalist.</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Quick Dynalist</string>
+    <string name="nav_header_title">QuickerDynalist</string>
     <string name="nav_header_subtitle">The quickest way to add your items.</string>
-    <string name="nav_header_desc">Quick Dynalist Logo</string>
+    <string name="nav_header_desc">QuickerDynalist Logo</string>
     <string name="advanced_item">Create advanced item</string>
     <string name="title_recent_list">Recent</string>
     <string name="title_bookmark_list">Your inboxes</string>

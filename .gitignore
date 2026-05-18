@@ -75,4 +75,5 @@ gen-external-apklibs
 # End of https://www.gitignore.io/api/android
 
 app/release
+outputs/
 .DS_Store
