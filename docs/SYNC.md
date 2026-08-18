@@ -4,19 +4,19 @@ This document summarizes how synchronization works in this codebase.
 
 ## High-level architecture
 
-Sync is **pull-first reconciliation** from Dynalist API into local ObjectBox storage, with safeguards for local pending edits.
+Sync is **[pull-first reconciliation](PULL-FIRST-RECONCILIATION.md)** from Dynalist API into local ObjectBox storage, with safeguards for local pending edits.
 
 Main pieces:
 
-- `app/src/main/java/com/louiskirsch/quickdynalist/Dynalist.kt`
+- `Dynalist.kt`
   - decides when to trigger sync
   - tracks sync state via EventBus (`isSyncing`)
-- `app/src/main/java/com/louiskirsch/quickdynalist/jobs/SyncJob.kt`
+- `/jobs/SyncJob.kt`
   - performs full sync logic
-- `app/src/main/java/com/louiskirsch/quickdynalist/jobs/ItemJob.kt` + subclasses
+- `/jobs/ItemJob.kt` + subclasses
   - local edit/move/delete/add jobs
   - mark affected items with `syncJob` so `SyncJob` won’t overwrite in-flight local changes
-- `app/src/main/java/com/louiskirsch/quickdynalist/objectbox/DynalistItem.kt`
+- `/objectbox/DynalistItem.kt`
   - item model, including `syncJob` and hierarchy helpers
 
 ## How sync is triggered
@@ -108,7 +108,7 @@ Local mutation jobs (`AddItemJob`, `EditItemJob`, `MoveItemJob`, `DeleteItemJob`
 `SyncJob` respects this:
 
 - does not overwrite certain fields for items with non-null `syncJob`
-- does not treat such rows as deletable “missing on server” rows
+- does not treat such rows as deletable "missing on server" rows
 
 When item jobs complete, they clear `syncJob`.
 
