@@ -4,7 +4,14 @@ This document summarizes how synchronization works in this codebase.
 
 ## High-level architecture
 
-Sync is **[pull-first reconciliation](PULL-FIRST-RECONCILIATION.md)** from Dynalist API into local ObjectBox storage, with safeguards for local pending edits.
+Sync is **[pull-first reconciliation](PULL-FIRST-RECONCILIATION.md)** from Dynalist API into local [ObjectBox](OBJECTBOX.md) storage, with safeguards for local pending edits.
+
+Existing local items are matched to remote Dynalist nodes by server identifiers first, with a fallback to `(content, createdTime)` for items that do not yet have stable server IDs. Here, matching means finding the local item that represents the same server-side Dynalist node.
+
+Because local edits are uploaded by separate item jobs, a full sync can pull server data before those edits have reached Dynalist. 
+
+Local pending edits are protected during this process. The `syncJob` field marks items that have pending local add/edit/move/delete work. Items marked with a local `syncJob` are not overwritten by pulled server data and are not treated as deletable simply because they are missing from the remote read. This lets local item jobs finish separately while full sync still brings the rest of the database closer to server state.
+
 
 Main pieces:
 
