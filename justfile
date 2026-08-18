@@ -18,3 +18,6 @@ export-apk: build
     mkdir -p "$HOME/Syncthing/APK/{{app-name}}"
     cp "{{output-dir}}/{{apk-name}}" "$HOME/Syncthing/APK/{{app-name}}/{{apk-name}}"
     @echo "$HOME/Syncthing/APK/{{app-name}}/{{apk-name}}"
+
+previous-version-tag:
+    @git tag --list '[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n 1
