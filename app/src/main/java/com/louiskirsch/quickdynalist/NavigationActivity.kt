@@ -31,7 +31,10 @@ import android.content.Intent
 import android.net.Uri
 import android.content.ActivityNotFoundException
 import android.graphics.PorterDuff
+import android.graphics.Typeface
 import android.text.Spannable
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -303,19 +306,53 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
     private fun showSyncLog() {
         val handler = Handler(Looper.getMainLooper())
-        val logText = TextView(this).apply {
-            setPadding(32, 24, 32, 24)
+        val horizontalPadding = resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
+        val verticalPadding = resources.getDimensionPixelSize(R.dimen.activity_vertical_margin)
+        val sectionSpacing = resources.getDimensionPixelSize(R.dimen.list_item_padding)
+        val currentStateText = TextView(this).apply {
             setTextIsSelectable(true)
+            textSize = 15f
+        }
+        val historyText = TextView(this).apply {
+            setTextIsSelectable(true)
+            textSize = 13f
+            typeface = Typeface.MONOSPACE
+        }
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+            addView(TextView(this@NavigationActivity).apply {
+                text = "Current state"
+                setTypeface(typeface, Typeface.BOLD)
+            })
+            addView(currentStateText, LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = sectionSpacing * 2
+            })
+            addView(TextView(this@NavigationActivity).apply {
+                text = "History"
+                setTypeface(typeface, Typeface.BOLD)
+            })
+            addView(ScrollView(this@NavigationActivity).apply {
+                addView(historyText)
+            }, LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    resources.displayMetrics.heightPixels / 3
+            ))
         }
         val refresh = object : Runnable {
             override fun run() {
-                logText.text = SyncLog.buildReport(this@NavigationActivity)
+                val report = SyncLog.buildReport(this@NavigationActivity)
+                currentStateText.text = report.currentState
+                historyText.text = report.history
                 handler.postDelayed(this, 1_000L)
             }
         }
         val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.sync_log_title)
-                .setView(ScrollView(this).apply { addView(logText) })
+                .setView(content)
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
         dialog.setOnDismissListener { handler.removeCallbacks(refresh) }

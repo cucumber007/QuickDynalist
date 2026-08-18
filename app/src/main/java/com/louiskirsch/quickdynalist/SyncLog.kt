@@ -1,7 +1,6 @@
 package com.louiskirsch.quickdynalist
 
 import android.content.Context
-import android.util.Log
 import com.louiskirsch.quickdynalist.objectbox.DynalistItem
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -15,6 +14,8 @@ object SyncLog {
     private const val OPERATION_VISIBILITY_DELAY_MS = 5_000L
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+
+    data class Report(val currentState: String, val history: String)
 
     fun delayOperationForVisibility() {
         Thread.sleep(OPERATION_VISIBILITY_DELAY_MS)
@@ -40,12 +41,7 @@ object SyncLog {
 
     @Synchronized
     fun recordError(job: String, throwable: Throwable?) {
-        val message = throwable?.let { Log.getStackTraceString(it).takeUnless { stack -> stack.isBlank() } }
-                ?: throwable?.localizedMessage
-                ?.takeUnless { it.isBlank() }
-                ?: throwable?.message?.takeUnless { it.isBlank() }
-                ?: throwable?.javaClass?.simpleName
-                ?: "Unknown error"
+        val message = throwable?.let { formatThrowable(it) } ?: "Unknown error"
         val entry = "${dateFormat.format(Date())}  $job\n$message"
         val prefs = DynalistApp.instance.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val errors = prefs.getString(KEY_ERRORS, "")!!
@@ -56,7 +52,15 @@ object SyncLog {
         prefs.edit().putString(KEY_ERRORS, errors.take(MAX_ERRORS).joinToString("\n\n")).apply()
     }
 
-    fun buildReport(context: Context): String {
+    private fun formatThrowable(throwable: Throwable): String {
+        val type = throwable.javaClass.simpleName
+        val message = throwable.localizedMessage
+                ?.takeUnless { it.isBlank() }
+                ?: throwable.message?.takeUnless { it.isBlank() }
+        return message?.let { "$type: $it" } ?: type
+    }
+
+    fun buildReport(context: Context): Report {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val fullSyncState = prefs.getString(KEY_FULL_SYNC_STATE, null)
         val pendingItems = DynalistItem.box.all.filter { it.syncJob != null }
@@ -79,6 +83,9 @@ object SyncLog {
                 .takeUnless { it.isBlank() }
                 ?: "No job errors recorded."
 
-        return "Sync queue\n$syncQueue$itemQueue\n\nJob errors\n$errors"
+        return Report(
+                currentState = "$syncQueue$itemQueue",
+                history = errors
+        )
     }
 }
