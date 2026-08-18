@@ -13,8 +13,14 @@ Prepare a release. Use the version requested by the user. If no version is speci
 just build
 ```
 
-7. Commit `/CHANGELOG.md` and the version bump as `Release <new-version>`.
-8. Tag that release commit with the new version:
+7. After the build succeeds, stage `/CHANGELOG.md` and `/app/build.gradle`, then commit the release changes:
+
+```sh
+git add CHANGELOG.md app/build.gradle
+git commit -m "Release <new-version>"
+```
+
+8. Create the new version tag on that release commit:
 
 ```sh
 git tag <new-version>
